@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 
@@ -18,19 +19,38 @@ func main() {
 		cmds Commands,
 		scope Scope,
 	) {
-		if len(os.Args) == 1 {
-			for name := range cmds {
-				pt("%s\n", name)
+
+		r := bufio.NewReader(os.Stdin)
+		for {
+			fmt.Print("> ")
+			os.Stdout.Sync()
+			line, err := r.ReadString('\n')
+			ce(err)
+
+			var res [][]rune
+			p := ParseTokens(&res, nil)
+			for _, r := range []rune(line) {
+				p, err = p(r)
+				ce(err)
 			}
-			return
+
+			if len(res) == 0 {
+				continue
+			}
+
+			name := string(res[0])
+			fn, ok := cmds[name]
+			if !ok {
+				pt("no such command\n")
+				continue
+			}
+			var args Args
+			for _, rs := range res[1:] {
+				args = append(args, string(rs))
+			}
+			scope.Fork(&args).Call(fn)
+
 		}
-		name := os.Args[1]
-		fn, ok := cmds[name]
-		if !ok {
-			panic(fmt.Errorf("no such command: %s", name))
-		}
-		scope.Fork(func() Args {
-			return os.Args[2:]
-		}).Call(fn)
+
 	})
 }
