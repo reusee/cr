@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/reusee/dscope"
@@ -25,6 +26,9 @@ func main() {
 			fmt.Print("> ")
 			os.Stdout.Sync()
 			line, err := r.ReadString('\n')
+			if is(err, io.EOF) {
+				break
+			}
 			ce(err)
 
 			var res [][]rune
