@@ -45,13 +45,19 @@ func (_ Global) Pkgs(
 		names, err := f.Readdirnames(-1)
 		ce(err)
 		hasGoFile := false
+		hasGoModFile := false
 		for _, name := range names {
 			if strings.HasSuffix(name, ".go") {
 				hasGoFile = true
-				break
+			}
+			if name == "go.mod" {
+				hasGoModFile = true
 			}
 		}
 		if !hasGoFile {
+			return nil
+		}
+		if hasGoModFile {
 			return nil
 		}
 		dirs = append(dirs, path)
