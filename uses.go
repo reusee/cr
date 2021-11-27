@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go/token"
 	"regexp"
 	"sort"
 
@@ -48,15 +49,27 @@ func (_ Global) UsesCommand(
 
 		item := candidates[0]
 		pt("%s\n", item.FullName)
+		var poses []token.Position
 		packages.Visit(pkgs, func(pkg *packages.Package) bool {
 			for ident, obj := range pkg.TypesInfo.Uses {
 				if obj != item.Object {
 					continue
 				}
-				pt("%s\n", fset.Position(ident.Pos()))
+				poses = append(poses, fset.Position(ident.Pos()))
 			}
 			return true
 		}, nil)
+		sort.Slice(poses, func(i, j int) bool {
+			posA := poses[i]
+			posB := poses[j]
+			if posA.Filename != posB.Filename {
+				return posA.Filename < posB.Filename
+			}
+			return posA.Offset < posB.Offset
+		})
+		for _, pos := range poses {
+			pt("%s\n", pos)
+		}
 
 	}
 
