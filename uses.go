@@ -17,9 +17,9 @@ func (_ Global) UsesCommand(
 		args Args,
 		items AllItems,
 	) {
-		if len(args) != 1 {
-			pt("need an object pattern\n")
-			return
+
+		if len(args) == 0 {
+			args = append(args, ".*")
 		}
 
 		pattern := regexp.MustCompile("(?i)" + args[0])
