@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/reusee/dscope"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -105,6 +106,16 @@ func (_ Global) PackagesConfigFuncs(
 	return ConfigFuncs{
 		"ignore": func(pattern string) {
 			*patterns = append(*patterns, regexp.MustCompile(pattern))
+		},
+	}
+}
+
+func (g Global) ReloadCommand() Commands {
+	return Commands{
+		"reload": func(
+			mutate dscope.Mutate,
+		) {
+			mutate(g.Pkgs)
 		},
 	}
 }
