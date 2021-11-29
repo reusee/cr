@@ -49,16 +49,20 @@ func (_ Global) UsesCommand(
 
 		item := candidates[0]
 		pt("%s\n", item.FullName)
-		var poses []token.Position
+		posSet := make(map[token.Position]bool)
 		packages.Visit(pkgs, func(pkg *packages.Package) bool {
 			for ident, obj := range pkg.TypesInfo.Uses {
 				if obj != item.Object {
 					continue
 				}
-				poses = append(poses, fset.Position(ident.Pos()))
+				posSet[fset.Position(ident.Pos())] = true
 			}
 			return true
 		}, nil)
+		var poses []token.Position
+		for pos := range posSet {
+			poses = append(poses, pos)
+		}
 		sort.Slice(poses, func(i, j int) bool {
 			posA := poses[i]
 			posB := poses[j]

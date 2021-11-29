@@ -8,6 +8,7 @@ import (
 )
 
 type Item struct {
+	Pkg      *packages.Package
 	FullName string
 	Object   types.Object
 }
@@ -35,6 +36,7 @@ func (_ Global) AllItems(
 			for _, name := range names {
 				obj := scope.Lookup(name)
 				item := &Item{
+					Pkg:      pkg,
 					FullName: pkg.PkgPath + "." + strings.Join(append(path, name), "."),
 					Object:   obj,
 				}
