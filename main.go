@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"io"
-	"os"
 
+	"github.com/chzyer/readline"
 	"github.com/reusee/dscope"
 )
 
@@ -27,12 +25,13 @@ func main() {
 		cmds Commands,
 	) {
 
-		r := bufio.NewReader(os.Stdin)
+		rl, err := readline.New("> ")
+		ce(err)
+		defer rl.Close()
+
 		for {
-			fmt.Print("> ")
-			os.Stdout.Sync()
-			line, err := r.ReadString('\n')
-			if is(err, io.EOF) {
+			line, err := rl.Readline()
+			if is(err, io.EOF) || is(err, readline.ErrInterrupt) {
 				break
 			}
 			ce(err)
