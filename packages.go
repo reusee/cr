@@ -1,7 +1,6 @@
 package main
 
 import (
-	"go/token"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -14,15 +13,12 @@ import (
 
 type Pkgs = []*packages.Package
 
-type Fset = *token.FileSet
-
 func (_ Global) Pkgs(
 	dir ModuleDir,
 	ignorePatterns IgnorePatterns,
 	buildTags BuildTags,
 ) (
 	pkgs Pkgs,
-	fset Fset,
 ) {
 
 	var dirs []string
@@ -67,7 +63,6 @@ func (_ Global) Pkgs(
 	if len(buildTags) > 0 {
 		flags = append(flags, "-tags="+strings.Join(buildTags, ","))
 	}
-	fset = new(token.FileSet)
 
 	var err error
 	pkgs, err = packages.Load(&packages.Config{
@@ -85,7 +80,6 @@ func (_ Global) Pkgs(
 		Env: append(os.Environ(), []string{
 			"GOARCH=amd64",
 		}...),
-		Fset:       fset,
 		Tests:      true,
 		BuildFlags: flags,
 	}, dirs...)

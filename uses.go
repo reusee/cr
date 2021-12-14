@@ -11,7 +11,6 @@ import (
 
 func (_ Global) UsesCommand(
 	pkgs Pkgs,
-	fset Fset,
 ) Commands {
 
 	fn := func(
@@ -55,7 +54,7 @@ func (_ Global) UsesCommand(
 				if obj != item.Object {
 					continue
 				}
-				posSet[fset.Position(ident.Pos())] = true
+				posSet[pkg.Fset.Position(ident.Pos())] = true
 			}
 			return true
 		}, nil)
