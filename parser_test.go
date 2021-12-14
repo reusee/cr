@@ -27,7 +27,7 @@ func TestParser(t *testing.T) {
 		var res [][]rune
 		p := ParseTokens(&res, nil)
 		var err error
-		for _, r := range []rune(spec.Input) {
+		for _, r := range spec.Input {
 			p, err = p(r)
 			ce(err)
 		}

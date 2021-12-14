@@ -39,7 +39,7 @@ func main() {
 
 			var res [][]rune
 			p := ParseTokens(&res, nil)
-			for _, r := range []rune(line) {
+			for _, r := range line {
 				p, err = p(r)
 				ce(err)
 			}
