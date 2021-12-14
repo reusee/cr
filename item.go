@@ -21,12 +21,8 @@ func (_ Global) AllItems(
 ) AllItems {
 	items := make(AllItems)
 
-	modDir := string(dir)
 	packages.Visit(pkgs, func(pkg *packages.Package) bool {
 		if pkg.Module == nil {
-			return false
-		}
-		if !strings.HasPrefix(pkg.Module.Dir, modDir) {
 			return false
 		}
 
