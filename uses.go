@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"sort"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -32,7 +33,7 @@ func (_ Global) UsesCommand(
 		}
 
 		if len(candidates) == 0 {
-			pt("no such item\n")
+			color.Red("no such item")
 			return
 		}
 
@@ -40,15 +41,14 @@ func (_ Global) UsesCommand(
 			sort.Slice(candidates, func(i, j int) bool {
 				return candidates[i].FullName < candidates[j].FullName
 			})
-			pt("ambiguous pattern\n")
 			for _, item := range candidates {
 				pt("~ %s\n", item.FullName)
 			}
+			color.Red("ambiguous pattern")
 			return
 		}
 
 		item := candidates[0]
-		pt("%s\n", item.FullName)
 		posSet := make(map[token.Position]bool)
 		packages.Visit(pkgs, func(pkg *packages.Package) bool {
 			for ident, obj := range pkg.TypesInfo.Uses {
@@ -74,6 +74,7 @@ func (_ Global) UsesCommand(
 		for _, pos := range poses {
 			pt("%s\n", pos)
 		}
+		color.Green("%s", item.FullName)
 
 	}
 

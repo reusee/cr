@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/chzyer/readline"
+	"github.com/fatih/color"
 	"github.com/reusee/dscope"
 )
 
@@ -50,7 +51,7 @@ func main() {
 			name := string(res[0])
 			fn, ok := cmds[name]
 			if !ok {
-				pt("no such command\n")
+				color.Red("no such command")
 				continue
 			}
 			var args Args
