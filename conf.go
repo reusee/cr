@@ -18,7 +18,8 @@ func (_ Global) LoadConfig(
 	scope Scope,
 ) LoadConfig {
 	return func() {
-		content, err := os.ReadFile(filepath.Join(string(dir), "cr.py"))
+		configFilePath := filepath.Join(string(dir), "cr.py")
+		content, err := os.ReadFile(configFilePath)
 		if is(err, os.ErrNotExist) {
 			return
 		}

@@ -3,7 +3,7 @@ module github.com/reusee/cr
 go 1.18
 
 require (
-	github.com/reusee/dscope v0.0.0-20211125083153-cb4ed9dec94f
+	github.com/reusee/dscope v0.0.0-20211214065454-1dd65e9cccb4
 	github.com/reusee/e4 v0.0.0-20211111112921-a1e3637d4313
 	github.com/reusee/starlarkutil v0.0.0-20211126070720-7790ee6f853a
 	go.starlark.net v0.0.0-20211013185944-b0039bd2cfe3

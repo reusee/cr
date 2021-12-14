@@ -18,14 +18,12 @@ type Fset = *token.FileSet
 
 func (_ Global) Pkgs(
 	dir ModuleDir,
-	loadConfig LoadConfig,
 	ignorePatterns IgnorePatterns,
+	buildTags BuildTags,
 ) (
 	pkgs Pkgs,
 	fset Fset,
 ) {
-
-	loadConfig()
 
 	var dirs []string
 	ce(filepath.WalkDir(string(dir), func(path string, entry fs.DirEntry, err error) error {
@@ -65,7 +63,12 @@ func (_ Global) Pkgs(
 		return nil
 	}))
 
+	var flags []string
+	if len(buildTags) > 0 {
+		flags = append(flags, "-tags="+strings.Join(buildTags, ","))
+	}
 	fset = new(token.FileSet)
+
 	var err error
 	pkgs, err = packages.Load(&packages.Config{
 		Mode: packages.NeedName |
@@ -82,8 +85,9 @@ func (_ Global) Pkgs(
 		Env: append(os.Environ(), []string{
 			"GOARCH=amd64",
 		}...),
-		Fset:  fset,
-		Tests: true,
+		Fset:       fset,
+		Tests:      true,
+		BuildFlags: flags,
 	}, dirs...)
 	ce(err)
 	if packages.PrintErrors(pkgs) > 0 {
@@ -116,6 +120,22 @@ func (g Global) ReloadCommand() Commands {
 			mutate dscope.Mutate,
 		) {
 			mutate(g.Pkgs)
+		},
+	}
+}
+
+type BuildTags []string
+
+func (_ Global) BuildTags() BuildTags {
+	return nil
+}
+
+func (_ Global) BuildTagsFunc(
+	mutate dscope.Mutate,
+) ConfigFuncs {
+	return ConfigFuncs{
+		"tags": func(tags BuildTags) {
+			mutate(&tags)
 		},
 	}
 }

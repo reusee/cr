@@ -16,9 +16,15 @@ type Args []string
 func main() {
 	decls := dscope.Methods(new(Global))
 	scope := dscope.NewMutable(decls...)
+
+	scope.Call(func(
+		loadConfig LoadConfig,
+	) {
+		loadConfig()
+	})
+
 	scope.Call(func(
 		cmds Commands,
-		get dscope.GetScope,
 	) {
 
 		r := bufio.NewReader(os.Stdin)
@@ -52,7 +58,7 @@ func main() {
 			for _, rs := range res[1:] {
 				args = append(args, string(rs))
 			}
-			get().Fork(&args).Call(fn)
+			scope.Fork(&args).Call(fn)
 
 		}
 
