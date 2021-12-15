@@ -9,13 +9,12 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func (_ Global) UsesCommand(
-	pkgs Pkgs,
-) Commands {
+func (_ Global) UsesCommand() Commands {
 
 	fn := func(
 		args Args,
 		items AllItems,
+		pkgs Pkgs,
 	) {
 
 		if len(args) == 0 {

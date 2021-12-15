@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
+	github.com/emicklei/dot v0.16.0
 	github.com/fatih/color v1.13.0
 	github.com/reusee/dscope v0.0.0-20211214065454-1dd65e9cccb4
 	github.com/reusee/e4 v0.0.0-20211111112921-a1e3637d4313
