@@ -57,7 +57,6 @@ func (_ Global) TypeGraphCommand() Commands {
 			if !pkgPattern.MatchString(useInfo.Package.PkgPath) {
 				return
 			}
-			pt("%v %v\n", t, use)
 			name := strings.TrimPrefix(t.String(), info.Package.Module.Path)
 			useName := strings.TrimPrefix(use.String(), useInfo.Package.Module.Path)
 			fieldUses[FieldUse{
@@ -71,7 +70,6 @@ func (_ Global) TypeGraphCommand() Commands {
 			switch underlying := typ.Underlying().(type) {
 
 			case *types.Struct:
-				pt("%v\n", typ)
 				for i := 0; i < underlying.NumFields(); i++ {
 					field := underlying.Field(i)
 					fieldType := field.Type()
@@ -136,7 +134,7 @@ func (_ Global) TypeGraphCommand() Commands {
 			graph.Edge(n1, n2, "use")
 		}
 
-		cmd := exec.Command("dot", "-Tsvg", "-o", "type-graph.svg")
+		cmd := exec.Command("dot", "-Tsvg", "-o", "type-graph.svg", "-K", "dot")
 		cmd.Stdin = strings.NewReader(graph.String())
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
