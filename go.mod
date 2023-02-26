@@ -20,6 +20,6 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/reusee/pr v0.0.0-20211003125556-3e6e9c7537ae // indirect
 	golang.org/x/mod v0.5.1 // indirect
-	golang.org/x/sys v0.0.0-20211020174200-9d6173849985 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
